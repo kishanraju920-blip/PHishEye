@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PhishEye · Extension Panel</title>
+  <link rel="stylesheet" href="popup.css">
+  <script src="popup.js" defer></script>
+  <script src="interactions.js" defer></script>
+</head>
+<body>
+  <!-- Separate 4-Second Closable AI ML Alert Popup -->
+  <div class="ml-toast" id="ml-toast" role="alert" aria-live="assertive">
+    <div class="toast-body">
+      <span class="toast-icon" aria-hidden="true">&#128302;</span>
+      <div class="toast-text">
+        <span class="toast-title">AI ML Alert Notice</span>
+        <span class="toast-score">Estimated Risk: N/A</span>
+      </div>
+      <button type="button" class="toast-close" id="toast-close" aria-label="Dismiss alert">&#x2715;</button>
+    </div>
+    <div class="toast-progress">
+      <div class="toast-progress-bar"></div>
+    </div>
+  </div>
+
+  <main class="panel" id="popup" aria-labelledby="title">
+    <svg class="background-art" viewBox="0 0 360 630" preserveAspectRatio="xMidYMid slice" fill="none" aria-hidden="true">
+      <g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <g class="doodle-chain" transform="translate(-18 110) rotate(-40)" stroke-width="7">
+          <rect x="-35" y="-110" width="82" height="155" rx="40"/>
+          <rect x="-20" y="-94" width="52" height="124" rx="25"/>
+          <rect x="-35" y="16" width="82" height="155" rx="40"/>
+          <rect x="-20" y="32" width="52" height="123" rx="25"/>
+        </g>
+        <g class="doodle-fish" transform="translate(287 150) rotate(-12) scale(.75)" stroke-width="4">
+          <path d="M55 8 C19 -43 -30 -39 -65 2 L-105 -32 Q-91 3 -109 37 L-61 16 Q8 58 55 8Z"/>
+        </g>
+        <g class="doodle-dolphin" transform="translate(-15 340) scale(.82)" stroke-width="4">
+          <path d="M145 31 Q128 20 111 20 C92 -20 49 -26 13 -14 Q-3 -21 -11 -43 Q-23 -48 -24 -13 C-61 -10 -84 -24 -106 -52 Q-122 -70 -126 -97 L-149 -118 Q-141 -85 -159 -88 Q-140 -70 -128 -80 C-119 -25 -90 17 -46 31 Q9 61 76 39 L116 33 Q142 45 153 38 Q159 33 145 31Z M25 44 Q8 78 -18 75 Q-8 53 4 43 M112 30 Q134 39 149 36"/>
+          <circle cx="92" cy="13" r="2" fill="currentColor" stroke="none"/>
+        </g>
+        <g class="doodle-database" transform="translate(294 538) rotate(-8)" stroke-width="5">
+          <ellipse cx="0" cy="-43" rx="77" ry="25"/>
+          <path d="M-77 -43 V70 C-77 104 77 104 77 70 V-43 M-77 0 C-77 34 77 34 77 0 M-77 43 C-77 77 77 77 77 43"/>
+          <path d="M19 -14 H47 M19 28 H47 M19 72 H47"/>
+          <circle cx="-49" cy="-7" r="4" fill="currentColor"/>
+          <circle cx="-49" cy="36" r="4" fill="currentColor"/>
+        </g>
+        <path d="M-36 604 Q30 555 99 594 Q143 625 166 598 M-35 617 Q35 568 97 607" stroke-width="4"/>
+      </g>
+    </svg>
+
+    <div class="content">
+      <header class="header">
+        <div class="brand">
+          <svg class="logo" viewBox="0 0 140 140" fill="none" aria-hidden="true">
+            <defs>
+              <clipPath id="eye-opening">
+                <path d="M14 61 Q70 55 126 61 L125 86 Q70 79 15 86Z"/>
+              </clipPath>
+            </defs>
+            <path class="eye-paper" d="M70 8 C105 5 128 32 130 67 C133 102 109 130 73 131 C36 134 10 110 9 76 C7 43 27 11 61 8Z" stroke="currentColor" stroke-width="5"/>
+            <g class="blinking-eye">
+              <g clip-path="url(#eye-opening)">
+                <g id="tracking-pupil">
+                  <rect x="44" y="47" width="53" height="48" rx="10" fill="currentColor"/>
+                </g>
+              </g>
+              <path d="M13 61 Q70 55 127 61 M14 86 Q70 79 126 86" stroke="currentColor" stroke-width="6"/>
+            </g>
+            <path d="M29 24 L39 18" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+          <div>
+            <h1 id="title"><span>PH</span>ish <span>EYE</span></h1>
+            <p class="brand-caption">YOUR LITTLE LOOKOUT</p>
+          </div>
+        </div>
+
+        <div class="settings">
+          <span class="connection" id="connection">Live Shield ●</span>
+          <label class="theme-label" for="toggle-protection">
+            <span id="protection-label">Protection</span>
+            <input type="checkbox" id="toggle-protection" checked hidden>
+            <button type="button" id="protection-switch-ui" class="switch" role="switch" aria-checked="true" aria-label="Protection Active"></button>
+          </label>
+          <label class="theme-label">
+            <span id="theme-label">Dark theme</span>
+            <input type="checkbox" id="toggle-theme" hidden>
+            <button type="button" id="theme" class="switch" role="switch" aria-checked="false" aria-label="Dark theme"></button>
+          </label>
+        </div>
+      </header>
+
+      <div class="site">
+        <span id="site-label">CURRENT SITE</span>
+        <strong id="domain">Reading current tab…</strong>
+        <strong id="target-url" hidden></strong>
+      </div>
+
+      <button type="button" class="awareness" id="awareness" aria-controls="why-report" aria-expanded="false" title="Open the warning explanation">
+        <svg class="awareness-scene" viewBox="0 0 116 62" fill="none" aria-hidden="true">
+          <defs>
+            <clipPath id="little-sea-clip">
+              <rect x="0" y="0" width="116" height="62" rx="8"/>
+            </clipPath>
+          </defs>
+          <g clip-path="url(#little-sea-clip)" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 49 Q22 43 42 49 T84 49 T124 49 M-4 55 Q16 50 36 55 T78 55 T120 55" opacity=".3"/>
+            <g transform="translate(27 21)">
+              <g class="little-fish one">
+                <path d="M14 0 C3 -12 -9 -9 -16 0 L-24 -7 Q-20 0 -24 7 L-15 3 Q3 13 14 0Z"/>
+                <circle cx="7" cy="-1" r=".9" fill="currentColor" stroke="none"/>
+              </g>
+            </g>
+            <g transform="translate(26 43) scale(.65)">
+              <g class="little-fish two">
+                <path d="M14 0 C3 -12 -9 -9 -16 0 L-24 -7 Q-20 0 -24 7 L-15 3 Q3 13 14 0Z"/>
+                <circle cx="7" cy="-1" r=".9" fill="currentColor" stroke="none"/>
+              </g>
+            </g>
+            <g transform="translate(44 32) scale(.45)">
+              <g class="little-fish three">
+                <path d="M14 0 C3 -12 -9 -9 -16 0 L-24 -7 Q-20 0 -24 7 L-15 3 Q3 13 14 0Z"/>
+                <circle cx="7" cy="-1" r=".9" fill="currentColor" stroke="none"/>
+              </g>
+            </g>
+            <circle class="little-bubble b1" cx="45" cy="49" r="2"/>
+            <circle class="little-bubble b2" cx="18" cy="52" r="1.5"/>
+            <g class="little-shield">
+              <path class="shield-paper" d="M81 8 L102 15 L100 33 Q97 45 81 52 Q65 45 62 33 L60 15Z"/>
+              <path class="shield-outline" d="M81 8 L102 15 L100 33 Q97 45 81 52 Q65 45 62 33 L60 15Z"/>
+              <path id="shield-symbol" d="M81 20 V32 M81 39 V40" stroke-width="3"/>
+            </g>
+          </g>
+        </svg>
+        <span class="awareness-copy">
+          <span id="awareness-label">SCANNING · ACTIVE SHIELD</span>
+          <strong id="awareness-tip">Checking this address…</strong>
+          <small>Read the reasons ↓</small>
+        </span>
+      </button>
+
+      <div class="assessment-wrap">
+        <svg class="corner-lookout" viewBox="0 0 110 55" fill="none" aria-hidden="true">
+          <g stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <circle class="corner-paper" cx="32" cy="27" r="19"/>
+            <circle class="corner-paper" cx="76" cy="23" r="19"/>
+            <g class="corner-blink">
+              <g class="corner-pupil">
+                <circle cx="33" cy="27" r="6" fill="currentColor" stroke="none"/>
+                <circle cx="35" cy="25" r="1.5" fill="var(--card)" stroke="none"/>
+              </g>
+            </g>
+            <g class="corner-blink second">
+              <g class="corner-pupil">
+                <circle cx="77" cy="23" r="6" fill="currentColor" stroke="none"/>
+                <circle cx="79" cy="21" r="1.5" fill="var(--card)" stroke="none"/>
+              </g>
+            </g>
+            <path class="corner-hands" d="M15 47 V40 Q15 36 18 37 V46 M21 46 V39 Q21 35 24 37 V46 M27 46 V40 M88 44 V37 Q88 33 91 35 V43 M94 44 V37 Q94 33 97 35 V44 M100 44 V38"/>
+            <path d="M9 16 L4 13 M15 8 L13 3 M97 8 L103 4" opacity=".6"/>
+          </g>
+        </svg>
+
+        <section class="assessment" id="hazard-card" aria-labelledby="verdict">
+          <div class="status" id="status">&#9203; SCANNING…</div>
+          <div id="verdict-badge" hidden></div>
+          <div class="score-ring">
+            <svg class="ring-sketch" viewBox="0 0 130 130" fill="none" aria-hidden="true">
+              <circle id="ring-progress" cx="65" cy="65" r="60"/>
+            </svg>
+            <span class="pencil-orbit">
+              <svg viewBox="0 0 26 40" fill="none" aria-hidden="true">
+                <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 10 L15 5 L23 25 L20 34 L12 29Z M6 10 Q3 3 9 1 Q13 -1 15 5 M8 12 L17 8 M12 29 L20 34 M14 12 L20 27 M20 34 L20 38 L16 35"/>
+                  <path d="M20 34 L20 38 L16 35Z" fill="currentColor"/>
+                </g>
+              </svg>
+            </span>
+            <span class="fish-orbit first">
+              <span class="dial-fish">
+                <svg viewBox="0 0 40 28" fill="none" aria-hidden="true">
+                  <g stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M35 13 C25 0 13 4 10 12 L3 5 L5 14 L2 22 L11 17 Q24 28 35 13Z"/>
+                    <circle cx="28" cy="12" r="1" fill="currentColor" stroke="none"/>
+                  </g>
+                </svg>
+              </span>
+            </span>
+            <span class="fish-orbit second">
+              <span class="dial-fish">
+                <svg viewBox="0 0 40 28" fill="none" aria-hidden="true">
+                  <g stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M35 13 C25 0 13 4 10 12 L3 5 L5 14 L2 22 L11 17 Q24 28 35 13Z"/>
+                    <circle cx="28" cy="12" r="1" fill="currentColor" stroke="none"/>
+                  </g>
+                </svg>
+              </span>
+            </span>
+            <div class="score-inner">
+              <strong id="score">—</strong>
+              <span id="confidence-score" hidden></span>
+              <span id="score-caption">DANGER SCORE</span>
+            </div>
+          </div>
+          <h2 id="verdict">Contacting PhishEye AI backend…</h2>
+          <p id="assessment-note">Real-time AI &amp; Zero-Day DOM Shield</p>
+          <div id="engine-subtext" hidden></div>
+        </section>
+      </div>
+
+      <details class="report" id="why-report">
+        <summary id="accordion-btn">
+          <span id="why-title">Why is it flagged?</span>
+          <svg class="warning-nudge" viewBox="0 0 100 40" fill="none" aria-hidden="true">
+            <path d="M91 26 Q79 -5 65 12 Q53 -8 38 12 Q20 -3 11 31 M8 22 L11 32 L21 27"/>
+          </svg>
+        </summary>
+        <p class="report-intro" id="report-intro">Review the supplied evidence. Missing checks are not safe results.</p>
+        <div id="accordion-panel">
+          <details class="reason" id="sub1">
+            <summary><span id="sub1StatusIcon" hidden></span><span id="sub1Title">01 · URL &amp; domain signals</span></summary>
+            <p id="url-reason">Analyzing URL lexical structure…</p>
+            <p id="sub1Desc" hidden></p>
+            <ul id="reasons-list" class="live-reasons-ul"></ul>
+            <aside id="sub1Meta">Check the exact domain before entering personal information.</aside>
+          </details>
+          <details class="reason" id="sub2">
+            <summary><span id="sub2StatusIcon" hidden></span><span id="sub2Title">02 · Page &amp; form inspection</span></summary>
+            <p id="form-reason">Inspecting password fields and form destinations…</p>
+            <p id="sub2Desc" hidden></p>
+            <aside id="sub2Meta">Unexpected password requests or submission destinations deserve a closer look.</aside>
+          </details>
+          <details class="reason" id="sub3">
+            <summary><span id="sub3StatusIcon" hidden></span><span id="sub3Title">03 · Threat-feed checks</span></summary>
+            <p id="feed-reason">Checking PhishTank &amp; URLhaus feeds…</p>
+            <p id="sub3Desc" hidden></p>
+            <aside id="sub3Meta">A missing threat-list match is not a guarantee of safety.</aside>
+          </details>
+          <details class="reason" id="sub4">
+            <summary><span id="sub4StatusIcon" hidden></span><span id="sub4Title">04 · XGBoost assessment</span></summary>
+            <p id="model-reason">Computing 17 lexical features via XGBoost model…</p>
+            <p id="sub4Desc" hidden></p>
+            <aside id="sub4Meta">A model score is an estimate, not a guarantee of safety.</aside>
+          </details>
+        </div>
+      </details>
+
+      <div class="evidence">
+        <span id="evidence-icon" aria-hidden="true">✓</span>
+        <p id="evidence">Scanning active tab…</p>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="primary" id="btn-goback">← Go back (recommended)</button>
+        <button type="button" class="action sandbox" id="btn-sandbox">◇ Run virtually in sandbox (Screenshot)</button>
+        <div id="sandbox-panel" class="sandbox-preview-panel" hidden>
+          <div id="sandbox-content" class="sandbox-preview-content"></div>
+        </div>
+        <div class="secondary-actions-row">
+          <button type="button" class="action report-action" id="btn-report-safe">&#9989; Report Safe</button>
+          <button type="button" class="action report-action" id="btn-report">&#128680; Report Site</button>
+          <button type="button" class="action continue" id="btn-proceed">Continue to site anyway →</button>
+          <button type="button" class="action continue" id="close" hidden>← Close panel</button>
+        </div>
+        <div class="confirm" id="confirmation" hidden>
+          <p>Continuing could expose you to a suspicious website. Do you want to continue?</p>
+          <button type="button" class="action back" id="btn-cancel">Stay here</button>
+          <button type="button" class="action continue" id="btn-confirm">Confirm — continue anyway</button>
+        </div>
+      </div>
+
+      <p class="message" id="message" role="status"></p>
+
+      <footer>
+        <span>TEAM FISH</span>
+        <button type="button" id="motion" class="motion-button" aria-pressed="true">Motion on</button>
+        <span id="mode-label">EXTENSION PANEL</span>
+      </footer>
+    </div>
+  </main>
+
+  <div class="closed-screen" id="closed" hidden>
+    <p>Panel closed.</p>
+    <button type="button" id="reopen">Reopen PhishEye</button>
+  </div>
+</body>
+</html>
