@@ -6,14 +6,14 @@ Layer1: Tranco Whitelist & Threat Feeds: Instant checks against verified legitim
 
 Layer 2: 3-Factor Correlation Matrix (Zero-Day Invariant Engine): Correlates lexical features, domain age (WHOIS/RDAP lookup), TLS certificate validity, and behavioral heuristics to flag zero-day phishing pages before they appear on public blacklists.
 
-2.
- Advanced Computer Vision & Brand Impersonation DetectorpHash Visual Matching: Computes 64-bit Perceptual Hashes (pHash) using 2D Discrete Cosine Transform (DCT) on favicons and page logos to detect visual spoofing of major brands (e.g., Microsoft, Google, PayPal, Apple, banking portals).
-Hotlink Detection: Flags unauthorized domains hotlinking official assets or CDNs belonging to protected brands.   3.
- Live NLP & Intent ForensicsScans page text samples and titles for social engineering triggers (e.g., fake account suspension coercion, crypto wallet drainer seed-phrase prompts, unauthorized Mod APK distribution lures). 
-4.
- Sandbox & DOM Signal AnalysisSafely crawls target URLs with strict SSRF guards and Content Security Policies, extracting forms, credential input fields, and exfiltration webhooks.  
-5.
- Download Safety InspectorPerforms secure payload inspection (size and time-limited downloads), validates magic byte signatures, checks archive contents for hidden executables, and cross-references file hashes against VirusTotal.  
+2. Advanced Computer Vision & Brand Impersonation DetectorpHash Visual Matching: Computes 64-bit Perceptual Hashes (pHash) using 2D Discrete Cosine Transform (DCT) on favicons and page logos to detect visual spoofing of major brands (e.g., Microsoft, Google, PayPal, Apple, banking portals).
+Hotlink Detection: Flags unauthorized domains hotlinking official assets or CDNs belonging to protected brands.
+
+3.Live NLP & Intent ForensicsScans page text samples and titles for social engineering triggers (e.g., fake account suspension coercion, crypto wallet drainer seed-phrase prompts, unauthorized Mod APK distribution lures).
+
+4.Sandbox & DOM Signal AnalysisSafely crawls target URLs with strict SSRF guards and Content Security Policies, extracting forms, credential input fields, and exfiltration webhooks. 
+
+5. Download Safety InspectorPerforms secure payload inspection (size and time-limited downloads), validates magic byte signatures, checks archive contents for hidden executables, and cross-references file hashes against VirusTotal.  
 
 Tech Stack & DependenciesFramework: FastAPI (Python) with CORS middleware enabled.   
 Machine Learning: xgboost (XGBClassifier) for multi-feature lexical and structural classification.   
