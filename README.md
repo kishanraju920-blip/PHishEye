@@ -1,3 +1,5 @@
+THIS PROJECT HAS WON THE OVERALL RUNNER UP FOR CHAKRAVYUH HACKATHON 2026 
+
 Core Features & Architecture
 1.
  Multi-Layer Detection Pipeline
