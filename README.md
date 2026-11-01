@@ -7,7 +7,6 @@ Core Features & Architecture
 Layer1: Tranco Whitelist & Threat Feeds: Instant checks against verified legitimate domains (Tranco top sites) and live blacklists (PhishTank, URLhaus).  
 
 Layer 2: 3-Factor Correlation Matrix (Zero-Day Invariant Engine): Correlates lexical features, domain age (WHOIS/RDAP lookup), TLS certificate validity, and behavioral heuristics to flag zero-day phishing pages before they appear on public blacklists.
-
 2. Advanced Computer Vision & Brand Impersonation DetectorpHash Visual Matching: Computes 64-bit Perceptual Hashes (pHash) using 2D Discrete Cosine Transform (DCT) on favicons and page logos to detect visual spoofing of major brands (e.g., Microsoft, Google, PayPal, Apple, banking portals).
 Hotlink Detection: Flags unauthorized domains hotlinking official assets or CDNs belonging to protected brands.
 
